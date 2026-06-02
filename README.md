@@ -100,7 +100,22 @@ cp ~/Library/DBeaverData/workspace6/Local/.dbeaver/credentials-config.json \
    ~/macpro/develop/source_code/globe/dbeaver-workspace/workspace6/Local/.dbeaver/credentials-config.json
 ```
 
-Después, en Mac Pro: cerrar DBeaver si estaba abierto, volver a abrirlo. Los proyectos deberían aparecer. Si no, **File → Import → Existing Projects** apuntando a `~/.local/share/DBeaverData/workspace6/`.
+### Gotcha: DBeaver no auto-descubre proyectos si `.metadata` ya existe
+
+DBeaver es Eclipse-based: registra los proyectos abiertos en `<workspace>/.metadata/.plugins/org.eclipse.core.resources/.projects/`. Solo escanea el filesystem cuando crea un `.metadata` fresh.
+
+Caso típico: instalás DBeaver en Mac Pro y lo abrís una vez por curiosidad. DBeaver crea `.metadata` con un proyecto default "General" registrado. Después llegan los symlinks `General_macpro` y `Local` al workspace folder, pero `.metadata` no los conoce → DBeaver los ignora.
+
+Dos formas de fixearlo:
+
+1. **Borrar `.metadata` y reabrir DBeaver** (más limpio si `.metadata` no tiene config valiosa):
+   ```bash
+   rm -rf ~/.local/share/DBeaverData/workspace6/.metadata
+   ```
+   Al reabrir, DBeaver recrea `.metadata` y escanea los proyectos físicos.
+
+2. **Importar manualmente desde DBeaver** (preserva `.metadata` existente):
+   File → Import → Existing Projects into Workspace → seleccionar el path del workspace → tildar los proyectos.
 
 ### Máquina standalone (sin SSHFS)
 
