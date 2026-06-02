@@ -23,10 +23,18 @@ dbeaver-workspace/
 
 ## Cómo funciona
 
-`~/Library/DBeaverData/` de cada máquina tiene symlinks apuntando a este repo:
+DBeaver guarda el workspace en distinta ruta según el sistema operativo:
+
+| OS | Ruta del workspace |
+|---|---|
+| **macOS** | `~/Library/DBeaverData/` |
+| **Linux** | `~/.local/share/DBeaverData/` |
+| **Windows** | `%APPDATA%\DBeaverData\` (no aplica hoy en el setup de Rodo) |
+
+En cualquier caso la estructura interna es la misma. Los symlinks apuntan al repo:
 
 ```
-~/Library/DBeaverData/
+<DBeaverData>/
 ├── workspace6/
 │   ├── General_macpro/  → symlink al repo
 │   ├── Local/           → symlink al repo
@@ -37,6 +45,8 @@ dbeaver-workspace/
 ```
 
 Cuando agregás una conexión o un script, DBeaver lo escribe en el path symlinked → cae físicamente en el repo. Hacés commit + push cuando querés y la otra máquina hace pull.
+
+**Símbolic links relativos** (especialmente útil cuando se accede al filesystem vía SSHFS — los symlinks relativos resuelven correctamente desde la perspectiva de cualquier cliente, mientras que los absolutos pueden romperse). En Mac Pro los symlinks ya están como relativos; en MacBook M están como absolutos (funciona porque la máquina lee su propio filesystem directo).
 
 ## Credenciales
 
@@ -58,31 +68,39 @@ Si configuraste una master password en DBeaver, en la otra máquina te la va a p
 
 ## Setup inicial en una máquina
 
-### Máquina con SSHFS activo (caso típico para Rodo)
+### Mac Pro (Linux) via SSHFS desde MacBook M
 
-Si la máquina nueva es la otra con la que ya tenés SSHFS:
+Si Mac Pro corre Linux, el path del workspace de DBeaver es `~/.local/share/DBeaverData/` (no `~/Library/DBeaverData/` que es de macOS).
+
+Asumiendo que en MacBook M ya tenés el workspace funcionando y querés llevarlo a Mac Pro:
 
 ```bash
-# Desde MacBook M, con el mount activo:
+# Desde MacBook M, con el mount SSHFS activo a Mac Pro:
 mkdir -p ~/macpro/develop/source_code/globe
 cd ~/macpro/develop/source_code/globe
 git clone git@github.com:rodo-globe/rodo-dbeaver-workspace.git dbeaver-workspace
 
-# Crear symlinks en ~/macpro/Library/DBeaverData/ — esto Claude lo hace
-mkdir -p ~/macpro/Library/DBeaverData/workspace6
-ln -s /Users/rodo/develop/source_code/globe/dbeaver-workspace/workspace6/General_macpro \
-      ~/macpro/Library/DBeaverData/workspace6/General_macpro
-ln -s /Users/rodo/develop/source_code/globe/dbeaver-workspace/workspace6/Local \
-      ~/macpro/Library/DBeaverData/workspace6/Local
-ln -s /Users/rodo/develop/source_code/globe/dbeaver-workspace/secure \
-      ~/macpro/Library/DBeaverData/secure
+# Limpiar lo que DBeaver Linux haya creado por default al primer arranque
+rm -rf ~/macpro/.local/share/DBeaverData/workspace6/General
+rm -rf ~/macpro/.local/share/DBeaverData/secure
 
-# Copiar credentials manualmente
+# Crear los symlinks RELATIVOS (críticos para SSHFS — los absolutos rompen
+# porque el cliente SSHFS-side resuelve el path en su propio filesystem)
+cd ~/macpro/.local/share/DBeaverData/workspace6 && \
+  ln -s ../../../../develop/source_code/globe/dbeaver-workspace/workspace6/General_macpro General_macpro && \
+  ln -s ../../../../develop/source_code/globe/dbeaver-workspace/workspace6/Local Local
+cd ~/macpro/.local/share/DBeaverData && \
+  ln -s ../../../develop/source_code/globe/dbeaver-workspace/secure secure
+
+# Copiar credentials DIRECTO al path real del repo en Mac Pro (NO al través del
+# symlink — el cp via SSHFS se confundiría con paths absolutos del target)
 cp ~/Library/DBeaverData/workspace6/General_macpro/.dbeaver/credentials-config.json \
-   ~/macpro/Library/DBeaverData/workspace6/General_macpro/.dbeaver/credentials-config.json
+   ~/macpro/develop/source_code/globe/dbeaver-workspace/workspace6/General_macpro/.dbeaver/credentials-config.json
 cp ~/Library/DBeaverData/workspace6/Local/.dbeaver/credentials-config.json \
-   ~/macpro/Library/DBeaverData/workspace6/Local/.dbeaver/credentials-config.json
+   ~/macpro/develop/source_code/globe/dbeaver-workspace/workspace6/Local/.dbeaver/credentials-config.json
 ```
+
+Después, en Mac Pro: cerrar DBeaver si estaba abierto, volver a abrirlo. Los proyectos deberían aparecer. Si no, **File → Import → Existing Projects** apuntando a `~/.local/share/DBeaverData/workspace6/`.
 
 ### Máquina standalone (sin SSHFS)
 
