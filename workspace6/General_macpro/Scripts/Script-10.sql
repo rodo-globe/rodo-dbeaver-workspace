@@ -1,0 +1,1 @@
+select distinct a.correo from Afiliado a ;

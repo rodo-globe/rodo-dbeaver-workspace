@@ -1,0 +1,23 @@
+# =============================================================================
+# DBeaver workspace — qué NO va al repo
+# =============================================================================
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+*.swp
+
+# Credenciales productivas — JAMÁS al repo, viajan manualmente entre máquinas
+# por SSHFS o copia directa. Si alguien clona el repo fresh, le tocará ingresar
+# o recibir el archivo aparte.
+**/credentials-config.json
+**/.credentials-config.json.bak
+
+# Backups automáticos de DBeaver (los regenera al editar)
+**/.data-sources.json.bak
+**/.project-metadata.json.bak
+**/.dbeaver-data-formats.json.bak
+
+# Locks y logs de sesión (transitorios)
+**/.lock
+**/*.log

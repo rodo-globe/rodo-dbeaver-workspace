@@ -1,0 +1,1 @@
+{"resources":{"Scripts/mevir migracion 211.sql":{"default-datasource":"mysql8-1980f247696-322cd64935c6226e"},"Scripts/participmevpart_migracion.sql":{"default-datasource":"mysql8-1980f247696-322cd64935c6226e","default-catalog":"participmevpart_migracion"},"Scripts/sets local - docker.sql":{"default-datasource":"mysql8-1947aba527c-355eb519415ae5a1","default-catalog":"sets"}}}

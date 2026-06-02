@@ -1,0 +1,1 @@
+select * from Segmento s order by id desc;

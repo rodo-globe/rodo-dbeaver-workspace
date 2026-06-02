@@ -1,0 +1,133 @@
+{
+	"folders": {},
+	"connections": {
+		"mysql8-191d87b2e2f-2f8b70442e9b4d82": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "172.23.0.204",
+			"save-password": true,
+			"configuration": {
+				"host": "172.23.0.204",
+				"port": "3306",
+				"url": "jdbc:mysql://172.23.0.204:3306/",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"connectTimeout": "20000",
+					"rewriteBatchedStatements": "true",
+					"enabledTLSProtocols": "TLSv1,TLSv1.1,TLSv1.2,TLSv1.3"
+				},
+				"auth-model": "native"
+			}
+		},
+		"mysql8-191e2971c3e-9cff57e4a8b0c38": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "172.23.0.205",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "timetracker_db",
+				"url": "jdbc:mysql://localhost:3306/timetracker_db",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native",
+				"handlers": {
+					"ssh_tunnel": {
+						"type": "TUNNEL",
+						"enabled": true,
+						"save-password": true,
+						"properties": {
+							"host": "172.23.0.205",
+							"port": 22.0,
+							"authType": "PASSWORD",
+							"implementation": "sshj",
+							"shareTunnels": true,
+							"localHost": "",
+							"remoteHost": ""
+						}
+					}
+				}
+			}
+		},
+		"mysql8-1947aba527c-355eb519415ae5a1": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "sets-local-docker",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "33063",
+				"url": "jdbc:mysql://localhost:33063/",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"connectTimeout": "20000",
+					"rewriteBatchedStatements": "true",
+					"enabledTLSProtocols": "TLSv1,TLSv1.1,TLSv1.2,TLSv1.3",
+					"allowPublicKeyRetrieval": "TRUE"
+				},
+				"auth-model": "native"
+			}
+		},
+		"mysql8-1960dae30fa-526d12faad570435": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "accounting",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "accounting",
+				"url": "jdbc:mysql://localhost:3306/accounting",
+				"configurationType": "MANUAL",
+				"home": "/opt/homebrew/Cellar/mysql-client/9.1.0",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		},
+		"mysql8-1980f247696-322cd64935c6226e": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "172.23.0.211",
+			"save-password": true,
+			"configuration": {
+				"host": "172.23.0.211",
+				"port": "33070",
+				"url": "jdbc:mysql://172.23.0.211:33070/",
+				"configurationType": "MANUAL",
+				"home": "/opt/homebrew/Cellar/mysql-client/9.3.0",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"properties": {
+					"connectTimeout": "20000",
+					"rewriteBatchedStatements": "true",
+					"enabledTLSProtocols": "TLSv1,TLSv1.1,TLSv1.2,TLSv1.3"
+				},
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}
